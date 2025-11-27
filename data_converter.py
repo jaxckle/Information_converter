@@ -3,11 +3,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 
-# Load cleaned CSV with integer labels
+
+
 df = pd.read_csv('numeric_format_training_int_pandas.csv')
 
-# Map the 'value' column (strings) to numeric features
-# Example: convert each character to ASCII codes and pad to length 8
+
 def easy_features(s):
     s = str(s).upper()
     is_bin = all(c in '01' for c in s)
@@ -116,6 +116,12 @@ def full_hex(hex_list):
 def full_bi(bi_list):
     return bi_dec(bi_list),bi_hex(bi_list)
 
+label_map_reverse = {
+    0: 'binary',
+    1: 'decimal',
+    2: 'hexadecimal',
+    3: 'unknown'
+}
 
 user_input=input("Enter the number you want to convert: ")
 
@@ -123,24 +129,18 @@ AI_understand = [easy_features(user_input)]
 
 predicted_format = rf.predict(AI_understand)[0]
 
-label_map_reverse = {
-    0: 'Binary',
-    1: 'Decimal',
-    2: 'Hexadecimal',
-    3: 'Unknown'
-}
+predicted_format_name = str(predicted_format).capitalize()
 
-predicted_format_name = label_map_reverse[predicted_format]
+def print_result(predicted_format_name):
+    if predicted_format_name=="Decimal":
+        print(full_dec(int(user_input)))
+    elif predicted_format_name=="Hexadecimal":
+        hex_list=list(user_input)
+        print(full_hex(hex_list))
+    elif predicted_format_name=="Binary":
+        bi_list=[int(bit) for bit in user_input]
+        print(full_bi(bi_list))
+    elif predicted_format_name=="Unknown":
+        print("The format could not be determined.")      
 
-print(f"The predicted format is: {predicted_format_name}")
-
-if predicted_format_name=="Decimal":
-    print(full_dec(int(user_input)))
-elif predicted_format_name=="Hexadecimal":
-    hex_list=list(user_input)
-    print(full_hex(hex_list))
-elif predicted_format_name=="Binary":
-    bi_list=[int(bit) for bit in user_input]
-    print(full_bi(bi_list))
-elif predicted_format_name=="Unknown":
-    print("The format could not be determined.")        
+print(print_result(predicted_format_name))
