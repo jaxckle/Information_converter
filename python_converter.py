@@ -52,12 +52,16 @@ def num_to_hex(num_list):
             num_list[i]=num_hex.get(num_list[i])
     return num_list
 def letter_convert(hex_list):
-    for i in range(0,len(hex_list)):
-        if str(hex_list[i]).isdigit()==False:
-            target_value=hex_list[i]
-            for key, value in num_hex.items():
-                if value == target_value:
-                    hex_list[i]=key
+    new = []
+    for c in hex_list:
+        if c.isdigit():
+            new.append(int(c))
+        else:
+            for k, v in num_hex.items():
+                if v == c.upper():
+                    new.append(k)
+                    break
+    return new
 # the coverting functions
 def dec_hex(num):
     hex_list=[]
@@ -75,19 +79,19 @@ def dec_bi(num):
     binary_list.reverse()   
     return binary_list
 def hex_dec(hex_list):
-    dec=[]
+    hex_list=letter_convert(hex_list)
     x=len(hex_list)-1
     for i in range(0,len(hex_list)):
-        letter_convert(hex_list)
         convert=hex_list[i]
         convert=16**x*convert
-        dec.append(convert)
+        hex_list[i]=convert
         x=x-1
-    return sum(dec)
+    print(hex_list)
+    return sum(hex_list)
 def hex_bi(hex_list):
     byte_list = []
     full_list = []
-    letter_convert(hex_list)
+    hex_list = letter_convert(hex_list)
     for i in range(len(hex_list)):
         value = hex_list[i] 
         for _ in range(4): 
