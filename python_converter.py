@@ -86,7 +86,6 @@ def hex_dec(hex_list):
         convert=16**x*convert
         hex_list[i]=convert
         x=x-1
-    print(hex_list)
     return sum(hex_list)
 def hex_bi(hex_list):
     byte_list = []
